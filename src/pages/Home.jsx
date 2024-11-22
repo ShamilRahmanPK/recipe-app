@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRecipe } from "../redux/Slices/recipeSlice";
 import { Link } from "react-router-dom";
-import View from "./View";
 
 const Home = () => {
   const dispatch = useDispatch();
   const { allRecipes, loading, errorMsg } = useSelector(
     (state) => state.recipeReducer
   );
-  console.log(allRecipes, loading, errorMsg);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const recipesPerPage = 6;
+  const recipesPerPage = 8; 
   const totalPages = Math.ceil(allRecipes?.length / recipesPerPage);
 
   const currentPageRecipeLastIndex = currentPage * recipesPerPage;
@@ -46,9 +43,9 @@ const Home = () => {
     <>
       <div className="main">
         <Header />
-        <div className="container py-4">
+        <div className="container py-4 mt-4">
           {loading ? (
-            <div className="flex justify-center item-center my-5 text-lg">
+            <div className="d-flex justify-content-center align-items-center my-5 text-lg">
               <img
                 width={"100px"}
                 height={"100px"}
@@ -64,19 +61,50 @@ const Home = () => {
                   visibleRecipes?.map((recipe) => (
                     <Col
                       key={recipe?.id}
+                      lg={3}
                       md={4}
                       sm={6}
                       xs={12}
                       className="mb-4"
                     >
-                      <Card className="shadow-lg border-0">
+                      <Card
+                        className="shadow-lg border-0 h-100"
+                        style={{
+                          transition:
+                            "transform 0.2s ease, box-shadow 0.2s ease",
+                          overflow: "hidden",
+                        }}
+                        onMouseOver={(e) => {
+                          e.currentTarget.style.transform = "scale(1.05)";
+                          e.currentTarget.style.boxShadow =
+                            "0 10px 20px rgba(0, 0, 0, 0.15)";
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.style.transform = "scale(1)";
+                          e.currentTarget.style.boxShadow = "none";
+                        }}
+                      >
                         <Card.Img
                           variant="top"
                           src={recipe?.image}
                           alt={recipe?.name}
+                          style={{
+                            height: "180px",
+                            objectFit: "cover",
+                          }}
                         />
                         <Card.Body className="bg-light">
-                          <Card.Title>{recipe?.name}</Card.Title>
+                          <Card.Title
+                            style={{
+                              fontSize: "1rem",
+                              fontWeight: "bold",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {recipe?.name}
+                          </Card.Title>
                           <Card.Text
                             className="text-muted"
                             style={{ fontSize: "0.875rem", lineHeight: "1.4" }}
@@ -87,24 +115,14 @@ const Home = () => {
                             to={`/${recipe?.id}/view`}
                             className="btn btn-primary mt-3 w-100"
                             style={{
-                              backgroundColor: "#6f42c1",
+                              background: "linear-gradient(135deg, #ff7e5f, #feb47b)",
                               color: "#fff",
                               border: "none",
-                              padding: "10px 20px",
-                              textAlign: "center",
                               borderRadius: "5px",
                               textDecoration: "none",
                               fontWeight: "bold",
                               transition:
                                 "background-color 0.3s ease, transform 0.2s ease",
-                            }}
-                            onMouseOver={(e) => {
-                              e.target.style.backgroundColor = "#5a2d9f";
-                              e.target.style.transform = "scale(1.05)"; 
-                            }}
-                            onMouseOut={(e) => {
-                              e.target.style.backgroundColor = "#6f42c1";
-                              e.target.style.transform = "scale(1)";
                             }}
                           >
                             View more
@@ -114,7 +132,7 @@ const Home = () => {
                     </Col>
                   ))
                 ) : (
-                  <div className="flex justify-center items-center font-bold text-red-600 my-5 text-lg">
+                  <div className="d-flex justify-content-center align-items-center font-bold text-danger my-5 text-lg">
                     Recipes not found!
                   </div>
                 )}

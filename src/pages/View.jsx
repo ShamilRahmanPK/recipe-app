@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Card, Badge, Button } from "react-bootstrap";
+import { Card, Badge } from "react-bootstrap";
 
 
 export const View = () => {
@@ -20,15 +20,16 @@ export const View = () => {
   return (
     <>
     <div
-      className="container py-4"
+      className="py-4"
       style={{
+        background: "linear-gradient(135deg, #ff7e5f, #feb47b)",
         fontFamily: "'Poppins', sans-serif",
       }}
     >
-      <Card className="shadow-lg border-0">
+      <Card className="container shadow-lg border-0">
         <Card.Img
           src={recipe?.image}
-          className="rounded"
+          className="rounded mt-2"
           style={{
             maxHeight: "400px",
             objectFit: "cover",
